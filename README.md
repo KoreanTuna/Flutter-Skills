@@ -36,20 +36,9 @@ Browse topics by category below. Each guide follows a consistent template define
 
 | Category | Guides |
 |---|---|
-| **State Management** | BLoC Pattern, Cubit Pattern, BLoC vs Cubit, Provider, Riverpod, State Restoration |
-| **Architecture** | Clean Architecture, Feature-first vs Layer-first, Repository Pattern, Domain Modeling |
-| **Navigation** | GoRouter, Navigator 2.0, Deep Linking, Navigation with BLoC |
-| **Dependency Injection** | GetIt, Injectable, Service Locator vs DI |
-| **Testing** | Unit Testing, Widget Testing, Integration Testing, Testable Code Patterns |
-| **Networking** | Dio Setup, Retrofit, API Error Handling, Offline-First |
-| **Persistence** | SharedPreferences, Drift, Hive/Isar, Secure Storage |
-| **Performance** | Widget Rebuild Optimization, List Performance, Image Optimization, Isolates, DevTools Profiling |
-| **UI** | Theme & Design System, Responsive Design, Animations, CustomPaint, Forms & Validation |
-| **Error Handling** | Error Handling Patterns, Crashlytics Integration, Global Error Boundary |
-| **Platform** | Platform Channels, Pigeon, FFI, Platform-Specific UI |
-| **Internationalization** | ARB Localization, Intl Best Practices |
-| **Firebase** | Setup, Authentication, Firestore Patterns, Cloud Functions |
-| **CI/CD** | GitHub Actions, Fastlane, Code Quality |
+| **State Management** | [Local State Management by Flutter Hook](state-management/local-state-management-by-flutter-hook.md) |
+| **Architecture** | [BLoC Apply Layer Architecture](architecture/bloc-apply-layer-architecture.md) |
+| **Navigation** | [GoRouter Navigation](navigation/go-router-navigation.md) |
 
 ## Guide Format
 
@@ -78,87 +67,13 @@ Flutter-Skills/
 ├── CONTRIBUTING.md
 │
 ├── state-management/
-│   ├── bloc-pattern.md
-│   ├── cubit-pattern.md
-│   ├── bloc-vs-cubit.md
-│   ├── provider.md
-│   ├── riverpod.md
-│   └── state-restoration.md
+│   └── local-state-management-by-flutter-hook.md
 │
 ├── architecture/
-│   ├── clean-architecture.md
-│   ├── feature-first-vs-layer-first.md
-│   ├── repository-pattern.md
-│   └── domain-modeling.md
+│   └── bloc-apply-layer-architecture.md
 │
-├── navigation/
-│   ├── go-router.md
-│   ├── navigator-2.md
-│   ├── deep-linking.md
-│   └── navigation-with-bloc.md
-│
-├── dependency-injection/
-│   ├── get-it.md
-│   ├── injectable.md
-│   └── service-locator-vs-di.md
-│
-├── testing/
-│   ├── unit-testing.md
-│   ├── widget-testing.md
-│   ├── integration-testing.md
-│   └── testable-code-patterns.md
-│
-├── networking/
-│   ├── dio-setup.md
-│   ├── retrofit-code-gen.md
-│   ├── api-error-handling.md
-│   └── offline-first.md
-│
-├── persistence/
-│   ├── shared-preferences.md
-│   ├── drift-database.md
-│   ├── hive-isar.md
-│   └── secure-storage.md
-│
-├── performance/
-│   ├── widget-rebuild-optimization.md
-│   ├── list-performance.md
-│   ├── image-optimization.md
-│   ├── isolates-and-compute.md
-│   └── devtools-profiling.md
-│
-├── ui/
-│   ├── theme-design-system.md
-│   ├── responsive-design.md
-│   ├── animations.md
-│   ├── custom-paint.md
-│   └── forms-and-validation.md
-│
-├── error-handling/
-│   ├── error-handling-patterns.md
-│   ├── crashlytics-integration.md
-│   └── global-error-boundary.md
-│
-├── platform/
-│   ├── platform-channels.md
-│   ├── pigeon-code-gen.md
-│   ├── ffi.md
-│   └── platform-specific-ui.md
-│
-├── internationalization/
-│   ├── arb-localization.md
-│   └── intl-best-practices.md
-│
-├── firebase/
-│   ├── firebase-setup.md
-│   ├── authentication.md
-│   ├── firestore-patterns.md
-│   └── cloud-functions.md
-│
-└── ci-cd/
-    ├── github-actions.md
-    ├── fastlane.md
-    └── code-quality.md
+└── navigation/
+    └── go-router-navigation.md
 ```
 
 ## Contributing
