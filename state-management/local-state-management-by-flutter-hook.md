@@ -286,21 +286,17 @@ final phoneController = useTextEditingController();
 ### 5. build 함수에 Hook 과도하게 나열
 
 ```dart
-// ❌ Hook 12개 나열 — build 비대화, 단일 책임 위반
+// ❌ Hook 과다 나열 — build 비대화, 단일 책임 위반
 Widget build(BuildContext context) {
   final nameController = useTextEditingController();
   final emailController = useTextEditingController();
   final phoneController = useTextEditingController();
-  final addressController = useTextEditingController();
   final nameFocus = useFocusNode();
   final emailFocus = useFocusNode();
   final phoneFocus = useFocusNode();
-  final addressFocus = useFocusNode();
   final isEditing = useState(false);
-  final showErrors = useState(false);
-  final animationController = useAnimationController(duration: const Duration(milliseconds: 200));
   final scrollController = useScrollController();
-  // ...
+  // ... 계속 증가
 }
 ```
 

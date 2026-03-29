@@ -242,6 +242,8 @@ BlocProvider(
 
 ### BLoC 간 통신: Coordinator 패턴
 
+BLoC은 서로를 직접 참조하지 않고, Coordinator의 Stream을 구독합니다.
+
 ```dart
 // domain/service/card_coordinator.dart
 @lazySingleton
@@ -261,76 +263,15 @@ class CardCoordinator {
 }
 ```
 
-BLoC은 서로를 직접 참조하지 않고, Coordinator의 Stream을 구독합니다.
-
 ## 안티패턴
 
 ### 1. BLoC에서 BuildContext 접근
 
-**잘못된 코드:**
-
-```dart
-class CardBloc extends Bloc<CardEvent, CardState> {
-  void _onFetch(CardFetched event, Emitter<CardState> emit) {
-    final locale = Localizations.localeOf(context); // ❌
-    // ...
-  }
-}
-```
-
-**왜 잘못되었는가:** BLoC은 Presentation 레이어의 UI 계층(BuildContext)에 의존하면 안 됩니다. 테스트가 불가능해지고, BLoC의 재사용성이 사라집니다.
-
-**올바른 방법:**
-
-```dart
-// 필요한 값을 Event로 전달
-sealed class CardEvent {
-  const CardEvent();
-}
-
-class CardFetched extends CardEvent {
-  final String locale;
-  const CardFetched({required this.locale});
-}
-```
+> [BLoC 패턴 — 안티패턴 #1](../state-management/bloc-pattern.md#1-bloc에서-buildcontext-접근) 참조
 
 ### 2. BLoC 간 직접 참조
 
-**잘못된 코드:**
-
-```dart
-class OrderBloc extends Bloc<OrderEvent, OrderState> {
-  final CartBloc cartBloc; // ❌ BLoC이 다른 BLoC에 직접 의존
-
-  OrderBloc(this.cartBloc);
-
-  void _onSubmit(OrderSubmitted event, Emitter<OrderState> emit) {
-    final items = cartBloc.state.items; // ❌
-  }
-}
-```
-
-**왜 잘못되었는가:** BLoC 간 순환 의존이 발생하고, 테스트 시 의존 BLoC까지 모두 생성해야 합니다. 생명주기 관리가 복잡해집니다.
-
-**올바른 방법:**
-
-```dart
-// Coordinator를 통한 간접 통신
-class OrderBloc extends Bloc<OrderEvent, OrderState> {
-  final OrderCoordinator _coordinator;
-  late final StreamSubscription _subscription;
-
-  OrderBloc(this._coordinator) : super(const OrderState()) {
-    _subscription = _coordinator.stream.listen(_onCoordinatorEvent);
-  }
-
-  @override
-  Future<void> close() {
-    _subscription.cancel();
-    return super.close();
-  }
-}
-```
+> [BLoC 패턴 — 안티패턴 #3](../state-management/bloc-pattern.md#3-bloc-간-직접-참조) 참조
 
 ### 3. View에서 Repository/UseCase 직접 호출
 
@@ -350,7 +291,7 @@ class CardListView extends StatelessWidget {
 }
 ```
 
-**왜 잘못되었는가:** Presentation 레이어가 Domain 레이어를 직접 호출하면 BLoC이 무용지물이 됩니다. 상태 추적, 로딩/에러 처리, 테스트가 모두 불가능합니다.
+**왜 잘못되었는가:** BLoC을 우회하면 상태 추적, 로딩/에러 처리, 테스트가 모두 불가능합니다.
 
 **올바른 방법:**
 
@@ -362,39 +303,7 @@ onPressed: () {
 
 ### 4. BlocProvider create에서 초기 이벤트 체이닝
 
-**잘못된 코드:**
-
-```dart
-BlocProvider(
-  create: (_) => locator<CardListBloc>()
-    ..add(const CardListDataFetched()), // ❌
-  child: const CardScreen(),
-),
-```
-
-**왜 잘못되었는가:** BLoC 생성과 이벤트 발행이 결합됩니다. 조건부 초기 이벤트 발행이 불가능하고, BLoC 재사용이 어렵습니다.
-
-**올바른 방법:**
-
-```dart
-// BlocProvider — 생성만
-BlocProvider(
-  create: (_) => locator<CardListBloc>(),
-  child: const CardScreen(),
-),
-
-// Screen — initState에서 발행
-class _CardScreenState extends State<CardScreen> {
-  @override
-  void initState() {
-    super.initState();
-    context.read<CardListBloc>().add(const CardListDataFetched());
-  }
-
-  @override
-  Widget build(BuildContext context) => const CardListView();
-}
-```
+> [BLoC 패턴 — 안티패턴 #2](../state-management/bloc-pattern.md#2-route에서-초기-이벤트-발행) 참조
 
 ### 5. Screen에서 BlocBuilder/BlocListener 사용
 
@@ -417,7 +326,7 @@ class _CardScreenState extends State<CardScreen> {
 }
 ```
 
-**왜 잘못되었는가:** Screen의 역할은 라우트 진입점과 초기 이벤트 발행뿐입니다. UI 구성과 상태 소비는 View의 책임입니다.
+**왜 잘못되었는가:** Screen은 라우트 진입점과 초기 이벤트 발행만 담당하며, 상태 소비는 View의 책임입니다.
 
 **올바른 방법:**
 
@@ -453,7 +362,7 @@ class CardItem extends StatelessWidget {
 }
 ```
 
-**왜 잘못되었는가:** Widget은 순수 UI 컴포넌트여야 합니다. BLoC에 의존하면 재사용이 불가능하고, Widget 단위 테스트가 어려워집니다.
+**왜 잘못되었는가:** Widget은 순수 UI 컴포넌트여야 하며, BLoC에 의존하면 재사용과 단위 테스트가 불가능합니다.
 
 **올바른 방법:**
 
@@ -486,7 +395,7 @@ void initState() {
 }
 ```
 
-**왜 잘못되었는가:** 초기화 시점의 상태는 이미 변했을 수 있습니다. Guard 조건은 BLoC 핸들러 내부에서 처리해야 합니다.
+**왜 잘못되었는가:** 초기화 시점의 상태는 race condition 위험이 있으므로 guard 조건은 BLoC 핸들러 내부에서 처리해야 합니다.
 
 **올바른 방법:**
 
@@ -509,15 +418,7 @@ void _onDataFetched(CardListDataFetched event, Emitter<CardListState> emit) {
 
 ### BLoC vs Cubit 선택
 
-| 기준                                  | BLoC            | Cubit               |
-| ------------------------------------- | --------------- | ------------------- |
-| 이벤트 변환 필요 (debounce, throttle) | ✅              | ❌                  |
-| 복잡한 비동기 흐름                    | ✅              | ❌                  |
-| 이벤트 추적/로깅 필요                 | ✅              | ❌                  |
-| 단순 상태 토글 (탭, 필터)             | ❌ 과도함       | ✅                  |
-| 글로벌 공유 상태                      | 가능하나 무거움 | ✅ `@lazySingleton` |
-
-**의사결정 규칙:** 이벤트 변환(debounce, throttle, sequential)이 필요하거나 복잡한 비동기 흐름이 있으면 BLoC. 단순한 상태 변경(토글, 탭 전환, 필터)이면 Cubit.
+> [BLoC 패턴 — BLoC vs Cubit 의사결정](../state-management/bloc-pattern.md#bloc-vs-cubit) 참조
 
 ### 단일 화면 vs 멀티 화면 구조 선택
 
@@ -576,25 +477,14 @@ void main() {
 
 ### Mock 하지 말아야 하는 것
 
-- **BLoC 테스트**: Repository를 Mockito Mock 대신 Fake로 구현 — 실제 동작과 가까운 테스트가 가능
+- **Repository** — Fake 구현체 사용 (Mockito Mock 대신)
 
 ## AI가 자주 하는 실수
 
 ### 1. BLoC에서 다른 BLoC 직접 주입
 
-**AI가 생성하는 코드:**
-
-```dart
-@injectable
-class OrderBloc extends Bloc<OrderEvent, OrderState> {
-  final CartBloc _cartBloc;
-  OrderBloc(this._cartBloc) : super(const OrderState());
-}
-```
-
-**무엇이 잘못되었는가:** BLoC 간 직접 의존은 순환 참조, 생명주기 충돌, 테스트 복잡도를 유발합니다.
-
-**올바른 접근법:** Coordinator 패턴으로 `StreamController.broadcast()`를 통한 간접 통신.
+BLoC 간 직접 의존은 순환 참조와 테스트 복잡도를 유발합니다. Coordinator 패턴으로 간접 통신해야 합니다.
+> [안티패턴 #2](#2-bloc-간-직접-참조) 및 [BLoC 패턴 — 안티패턴 #3](../state-management/bloc-pattern.md#3-bloc-간-직접-참조) 참조
 
 ### 2. Screen/View/Widget 계층 무시
 
@@ -628,20 +518,8 @@ class CardScreen extends StatelessWidget {
 
 ### 3. BlocProvider create에서 이벤트 체이닝
 
-**AI가 생성하는 코드:**
-
-```dart
-BlocProvider(
-  create: (_) => locator<CardBloc>()
-    ..add(const DataFetched())
-    ..add(const FilterApplied(type: 'all')),
-  child: const CardScreen(),
-),
-```
-
-**무엇이 잘못되었는가:** BLoC 생성 시점에 비즈니스 로직이 들어갑니다. 조건부 이벤트 발행이 불가능합니다.
-
-**올바른 접근법:** `create`에서는 생성만. 초기 이벤트는 Screen의 `initState`에서 발행.
+`create`에서는 BLoC 생성만 하고, 초기 이벤트는 Screen의 `initState`에서 발행해야 합니다.
+> [안티패턴 #4](#4-blocprovider-create에서-초기-이벤트-체이닝) 및 [BLoC 패턴 — 안티패턴 #2](../state-management/bloc-pattern.md#2-route에서-초기-이벤트-발행) 참조
 
 ## 네이밍 컨벤션
 

@@ -195,7 +195,7 @@ context.go('/home/detail/123');
 context.go('/Home/Detail/123'); // 오타 — 404
 ```
 
-**왜 잘못되었는가:** 경로 변경 시 모든 호출부를 수동으로 찾아 수정해야 하며, 오타를 컴파일 타임에 잡을 수 없습니다.
+**왜 잘못되었는가:** 경로 변경 시 모든 호출부를 수동 수정해야 하며, 오타를 컴파일 타임에 잡을 수 없습니다.
 
 **올바른 방법:**
 
@@ -221,7 +221,7 @@ String? _redirect(BuildContext context, GoRouterState state) {
 }
 ```
 
-**왜 잘못되었는가:** `redirect`는 동기 함수입니다. 비동기 작업을 넣으면 라우팅이 차단되거나 예상치 못한 동작이 발생합니다.
+**왜 잘못되었는가:** `redirect`는 동기 함수이므로 비동기 작업을 넣으면 예상치 못한 동작이 발생합니다.
 
 **올바른 방법:**
 
@@ -256,7 +256,7 @@ StatefulShellBranch(
 ),
 ```
 
-**왜 잘못되었는가:** 포토 뷰어처럼 몰입형 화면에서 하단 탭이 노출되면 UX가 깨집니다.
+**왜 잘못되었는가:** 몰입형 화면에서 하단 탭이 노출되어 UX가 깨집니다.
 
 **올바른 방법:**
 
@@ -284,7 +284,7 @@ class MyApp extends StatelessWidget {
 }
 ```
 
-**왜 잘못되었는가:** GoRouter가 rebuild마다 재생성되면 네비게이션 스택이 초기화되어 사용자가 뒤로가기를 할 수 없게 됩니다.
+**왜 잘못되었는가:** rebuild마다 GoRouter가 재생성되면 네비게이션 스택이 초기화됩니다.
 
 **올바른 방법:**
 
@@ -312,7 +312,7 @@ onTap: () => context.go('/detail/${item.id}'),
 // 뒤로가기 시 리스트가 아닌 홈('/')으로 이동
 ```
 
-**왜 잘못되었는가:** `go`는 URL 스택을 교체하므로 이전 화면 정보가 사라집니다. 사용자가 뒤로가기를 누르면 기대한 리스트가 아닌 다른 화면으로 돌아갑니다.
+**왜 잘못되었는가:** `go`는 URL 스택을 교체하므로 뒤로가기 시 기대한 화면이 아닌 다른 화면으로 돌아갑니다.
 
 **올바른 방법:**
 
@@ -443,7 +443,7 @@ onTap: () {
 }
 ```
 
-**무엇이 잘못되었는가:** GoRouter의 URL 동기화, 리다이렉트, 딥링크가 모두 무시됩니다. 브라우저 URL이 업데이트되지 않고, 뒤로가기/앞으로가기 동작이 깨집니다.
+**무엇이 잘못되었는가:** GoRouter의 URL 동기화, 리다이렉트, 딥링크가 모두 무시되어 뒤로가기/앞으로가기 동작이 깨집니다.
 
 **올바른 접근법:**
 
@@ -467,7 +467,7 @@ GoRoute(
 ),
 ```
 
-**무엇이 잘못되었는가:** 경로에 정의된 `:userId`, `:postId`가 화면에 전달되지 않아 딥링크로 직접 접근 시 데이터가 없는 빈 화면이 표시됩니다.
+**무엇이 잘못되었는가:** 경로 파라미터가 화면에 전달되지 않아 딥링크로 직접 접근 시 빈 화면이 표시됩니다.
 
 **올바른 접근법:**
 
@@ -503,7 +503,7 @@ ShellRoute(
 ),
 ```
 
-**무엇이 잘못되었는가:** `ShellRoute`는 탭 전환 시 이전 탭의 Widget 트리를 파괴합니다. 사용자가 리스트를 스크롤한 뒤 다른 탭으로 갔다 돌아오면 스크롤 위치가 초기화됩니다.
+**무엇이 잘못되었는가:** `ShellRoute`는 탭 전환 시 이전 탭의 Widget 트리를 파괴하여 스크롤 위치 등 상태가 초기화됩니다.
 
 **올바른 접근법:**
 
@@ -516,15 +516,11 @@ StatefulShellRoute.indexedStack(
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: navigationShell.currentIndex,
         onTap: (index) => navigationShell.goBranch(index),
-        items: const [...],
+        items: const [/* ... */],
       ),
     );
   },
-  branches: [
-    StatefulShellBranch(routes: [/* home routes */]),
-    StatefulShellBranch(routes: [/* search routes */]),
-    StatefulShellBranch(routes: [/* profile routes */]),
-  ],
+  branches: [/* StatefulShellBranch per tab */],
 ),
 ```
 

@@ -249,7 +249,7 @@ class User with _$User {
 }
 ```
 
-**왜 잘못되었는가:** API 스펙이 변경되면(`user_name` → `display_name`) Domain Model까지 수정해야 합니다. Domain 레이어의 독립성이 깨집니다.
+**왜 잘못되었는가:** API 스펙 변경이 Domain Model까지 전파되어 레이어 독립성이 깨집니다.
 
 **올바른 방법:**
 
@@ -293,7 +293,7 @@ class UserListState with _$UserListState {
 }
 ```
 
-**왜 잘못되었는가:** API 응답 구조가 변경되면 State, View, Widget까지 연쇄 수정이 필요합니다. Presentation 레이어가 Data 레이어에 의존하게 됩니다.
+**왜 잘못되었는가:** API 응답 구조 변경이 State, View, Widget까지 연쇄 수정을 유발합니다.
 
 **올바른 방법:**
 
@@ -325,7 +325,7 @@ class Order with _$Order {
 }
 ```
 
-**왜 잘못되었는가:** `status`에 오타("pnding")를 넣어도 컴파일 에러가 발생하지 않습니다. `totalAmount`를 숫자로 파싱할 때마다 에러 처리가 필요합니다.
+**왜 잘못되었는가:** 오타나 잘못된 값이 컴파일 타임에 잡히지 않고 런타임 에러로 이어집니다.
 
 **올바른 방법:**
 
@@ -358,7 +358,7 @@ final updatedUser = User(
 );
 ```
 
-**왜 잘못되었는가:** 필드가 추가되면 복사 누락이 발생합니다. Freezed가 생성한 `copyWith`를 사용하지 않으면 Freezed를 쓰는 의미가 없습니다.
+**왜 잘못되었는가:** 필드 추가 시 복사 누락이 발생하며, Freezed의 `copyWith`를 사용하지 않는 것은 Freezed 도입 목적에 반합니다.
 
 **올바른 방법:**
 
@@ -382,7 +382,7 @@ class CreateUserResult {
 }
 ```
 
-**왜 잘못되었는가:** `success == true`인데 `user == null`인 상태, `success == false`인데 `errorMessage == null`인 상태 등 불가능해야 하는 조합이 가능합니다.
+**왜 잘못되었는가:** `success == true && user == null` 같은 불가능해야 하는 상태 조합이 가능합니다.
 
 **올바른 방법:**
 
@@ -541,7 +541,7 @@ class Product with _$Product {
 }
 ```
 
-**무엇이 잘못되었는가:** Domain Model이 API 스펙(`unit_price`)에 결합됩니다. API 변경 시 비즈니스 로직까지 영향이 전파됩니다.
+**무엇이 잘못되었는가:** Domain Model이 API 스펙(`unit_price`)에 결합되어 API 변경이 비즈니스 로직까지 전파됩니다.
 
 **올바른 접근법:**
 
@@ -584,7 +584,7 @@ static UserRole fromString(String value) {
 }
 ```
 
-**무엇이 잘못되었는가:** 서버가 새로운 role 값을 추가하면 앱이 즉시 크래시합니다. 앱 업데이트 없이는 복구 불가합니다.
+**무엇이 잘못되었는가:** 서버가 새 role 값을 추가하면 앱이 즉시 크래시하며 앱 업데이트 없이 복구 불가합니다.
 
 **올바른 접근법:**
 
@@ -619,7 +619,7 @@ class UserRepositoryImpl implements UserRepository {
 }
 ```
 
-**무엇이 잘못되었는가:** 동일한 DTO → Model 변환이 여러 Repository 메서드에서 중복됩니다. DTO 필드 변경 시 모든 변환 지점을 찾아 수정해야 합니다.
+**무엇이 잘못되었는가:** 동일한 DTO → Model 변환이 여러 Repository 메서드에 중복되어 DTO 변경 시 모든 지점을 수정해야 합니다.
 
 **올바른 접근법:**
 

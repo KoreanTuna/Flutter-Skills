@@ -36,9 +36,13 @@ Browse topics by category below. Each guide follows a consistent template define
 
 | Category | Guides |
 |---|---|
-| **State Management** | [Local State Management by Flutter Hook](state-management/local-state-management-by-flutter-hook.md) |
-| **Architecture** | [BLoC Apply Layer Architecture](architecture/bloc-apply-layer-architecture.md), [Data Modeling](architecture/data-modeling.md) |
+| **State Management** | [BLoC Pattern](state-management/bloc-pattern.md), [BLoC Event Transformer](state-management/bloc-event-transformer.md), [Pagination State](state-management/pagination-state.md), [Local State Management by Flutter Hook](state-management/local-state-management-by-flutter-hook.md) |
+| **Architecture** | [BLoC Apply Layer Architecture](architecture/bloc-apply-layer-architecture.md), [CQRS Layer Architecture](architecture/cqrs-layer-architecture.md), [Data Modeling](architecture/data-modeling.md) |
 | **Navigation** | [GoRouter Navigation](navigation/go-router-navigation.md) |
+| **Dependency Injection** | [GetIt & Injectable](dependency-injection/get-it-injectable.md) |
+| **Error Handling** | [Result Pattern](error-handling/result-pattern.md) |
+| **Performance** | [RepaintBoundary](performance/repaint-boundary.md) |
+| **Networking** | [Retry & Exponential Backoff](networking/retry-exponential-backoff.md) |
 
 ## Guide Format
 
@@ -67,14 +71,30 @@ Flutter-Skills/
 ├── CONTRIBUTING.md
 │
 ├── state-management/
+│   ├── bloc-pattern.md
+│   ├── bloc-event-transformer.md
+│   ├── pagination-state.md
 │   └── local-state-management-by-flutter-hook.md
 │
 ├── architecture/
 │   ├── bloc-apply-layer-architecture.md
+│   ├── cqrs-layer-architecture.md
 │   └── data-modeling.md
 │
-└── navigation/
-    └── go-router-navigation.md
+├── navigation/
+│   └── go-router-navigation.md
+│
+├── dependency-injection/
+│   └── get-it-injectable.md
+│
+├── error-handling/
+│   └── result-pattern.md
+│
+├── performance/
+│   └── repaint-boundary.md
+│
+└── networking/
+    └── retry-exponential-backoff.md
 ```
 
 ## Contributing
