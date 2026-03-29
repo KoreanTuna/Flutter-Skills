@@ -42,6 +42,7 @@ Browse topics by category below. Each guide follows a consistent template define
 | **Dependency Injection** | [GetIt & Injectable](dependency-injection/get-it-injectable.md) |
 | **Error Handling** | [Result Pattern](error-handling/result-pattern.md) |
 | **Performance** | [RepaintBoundary](performance/repaint-boundary.md) |
+| **Persistence** | [SharedPreferences](persistence/shared-preferences.md), [SecureStorage](persistence/secure-storage.md) |
 | **Networking** | [Retry & Exponential Backoff](networking/retry-exponential-backoff.md) |
 
 ## Guide Format
@@ -89,6 +90,10 @@ Flutter-Skills/
 │
 ├── error-handling/
 │   └── result-pattern.md
+│
+├── persistence/
+│   ├── shared-preferences.md
+│   └── secure-storage.md
 │
 ├── performance/
 │   └── repaint-boundary.md
