@@ -37,7 +37,7 @@ Browse topics by category below. Each guide follows a consistent template define
 | Category | Guides |
 |---|---|
 | **State Management** | [Local State Management by Flutter Hook](state-management/local-state-management-by-flutter-hook.md) |
-| **Architecture** | [BLoC Apply Layer Architecture](architecture/bloc-apply-layer-architecture.md) |
+| **Architecture** | [BLoC Apply Layer Architecture](architecture/bloc-apply-layer-architecture.md), [Data Modeling](architecture/data-modeling.md) |
 | **Navigation** | [GoRouter Navigation](navigation/go-router-navigation.md) |
 
 ## Guide Format
@@ -70,7 +70,8 @@ Flutter-Skills/
 │   └── local-state-management-by-flutter-hook.md
 │
 ├── architecture/
-│   └── bloc-apply-layer-architecture.md
+│   ├── bloc-apply-layer-architecture.md
+│   └── data-modeling.md
 │
 └── navigation/
     └── go-router-navigation.md
